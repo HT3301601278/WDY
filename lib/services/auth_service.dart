@@ -11,11 +11,12 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
       ApiConstants.token = data['token'];
       return data['token'];
     } else {
-      throw Exception('登录失败');
+      final errorData = jsonDecode(utf8.decode(response.bodyBytes));
+      throw Exception(errorData['message'] ?? '登录失败');
     }
   }
 
@@ -27,7 +28,8 @@ class AuthService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('注册失败');
+      final errorData = jsonDecode(utf8.decode(response.bodyBytes));
+      throw Exception(errorData['message'] ?? '注册失败');
     }
   }
 }

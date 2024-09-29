@@ -52,7 +52,7 @@ class _LoginFormState extends State<LoginForm> {
                   Navigator.pushReplacementNamed(context, '/devices');
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('登录失败: $e')),
+                    SnackBar(content: Text('${e.toString()}')),
                   );
                 }
               }
