@@ -21,21 +21,44 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_isLogin ? '登录' : '注册'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _isLogin ? const LoginForm() : const RegisterForm(),
-              TextButton(
-                onPressed: _toggleView,
-                child: Text(_isLogin ? '没有账号? 注册' : '已有账号? 登录'),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blue.shade300, Colors.blue.shade700],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _isLogin ? '登录' : '注册',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      const SizedBox(height: 32),
+                      _isLogin ? const LoginForm() : const RegisterForm(),
+                      const SizedBox(height: 16),
+                      TextButton(
+                        onPressed: _toggleView,
+                        child: Text(_isLogin ? '没有账号? 注册' : '已有账号? 登录'),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ],
+            ),
           ),
         ),
       ),

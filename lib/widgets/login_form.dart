@@ -18,10 +18,15 @@ class _LoginFormState extends State<LoginForm> {
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
             controller: _usernameController,
-            decoration: const InputDecoration(labelText: '用户名'),
+            decoration: InputDecoration(
+              labelText: '用户名',
+              prefixIcon: Icon(Icons.person),
+              border: OutlineInputBorder(),
+            ),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return '请输入用户名';
@@ -29,9 +34,14 @@ class _LoginFormState extends State<LoginForm> {
               return null;
             },
           ),
+          SizedBox(height: 16),
           TextFormField(
             controller: _passwordController,
-            decoration: const InputDecoration(labelText: '密码'),
+            decoration: InputDecoration(
+              labelText: '密码',
+              prefixIcon: Icon(Icons.lock),
+              border: OutlineInputBorder(),
+            ),
             obscureText: true,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -40,6 +50,7 @@ class _LoginFormState extends State<LoginForm> {
               return null;
             },
           ),
+          SizedBox(height: 24),
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
@@ -48,7 +59,6 @@ class _LoginFormState extends State<LoginForm> {
                     _usernameController.text,
                     _passwordController.text,
                   );
-                  // 登录成功后导航到设备管理页面
                   Navigator.pushReplacementNamed(context, '/devices');
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -57,7 +67,15 @@ class _LoginFormState extends State<LoginForm> {
                 }
               }
             },
-            child: const Text('登录'),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Text('登录', style: TextStyle(fontSize: 18)),
+            ),
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
           ),
         ],
       ),
