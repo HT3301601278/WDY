@@ -2,27 +2,86 @@
 
 ## 项目简介
 
-这是一个基于Flutter开发的物联网设备管理系统移动应用。该应用允许用户登录、注册、管理物联网设备,并查看设备的数据分析。本项目旨在为物联网设备管理提供一个直观、易用的移动端解决方案。
+物联网设备管理系统是一个基于Flutter开发的跨平台移动应用，旨在帮助用户轻松管理和监控其物联网（IoT）设备。通过直观的用户界面，用户可以注册和登录账户、查看设备列表、管理设备详情以及分析设备产生的数据。本项目适合希望学习Flutter应用开发及物联网设备管理的初学者和开发者。
 
 ## 功能特性
 
-1. 用户认证:登录和注册
-2. 设备管理:查看、添加设备
-3. 设备详情:查看单个设备的详细信息
-4. 数据分析:查看设备的数据分析报告
+1. **用户认证**
+   - 用户注册与登录
+   - 表单验证与错误处理
+
+2. **设备管理**
+   - 查看所有已注册的设备
+   - 添加新设备
+   - 查看设备详情
+   - 删除或编辑设备信息
+
+3. **数据分析**
+   - 查看设备产生的数据
+   - 数据表格展示
+   - 支持数据的排序与筛选
+
+4. **用户界面**
+   - 现代化设计与一致的风格
+   - 渐变背景与卡片式布局
+   - 响应式设计，适配不同屏幕尺寸
 
 ## 技术栈
 
-- Flutter: 跨平台移动应用开发框架
-- Dart: 编程语言
-- HTTP: 网络请求
-- JSON: 数据交换格式
-- Material Design: UI设计语言
+- [Flutter](https://flutter.dev/) - 用于构建跨平台移动应用
+- [Dart](https://dart.dev/) - Flutter的编程语言
+- [HTTP](https://pub.dev/packages/http) - 处理网络请求
+- [JSON](https://dart.dev/guides/json) - 数据交换格式
+- [Material Design](https://material.io/design) - UI设计语言
+
+## 安装与运行
+
+### 前提条件
+
+- **Flutter SDK**: 确保已安装Flutter SDK。安装指南见[官方文档](https://flutter.dev/docs/get-started/install)。
+- **开发工具**: 推荐使用[Android Studio](https://developer.android.com/studio)或[Visual Studio Code](https://code.visualstudio.com/)。
+- **设备或模拟器**: 配置Android或iOS设备，或使用模拟器/仿真器。
+- **后端API**: 确保有可用的后端API端点，用于用户认证和设备管理。
+
+### 安装步骤
+
+1. **克隆仓库**
+
+   ```bash
+   git clone https://github.com/HT3301601278/WDY.git
+   cd 物联网设备管理系统
+   ```
+
+2. **安装依赖**
+
+   ```bash
+   flutter pub get
+   ```
+
+3. **配置API常量**
+
+   在 `lib/utils/constants.dart` 文件中，配置API的 `baseUrl` 和 `token`。
+
+   ```dart
+   class ApiConstants {
+     static const String baseUrl = 'https://api.example.com'; // 替换为您的API端点
+     static String token = ''; // 用户登录后设置
+   }
+   ```
+
+4. **运行应用**
+
+   连接设备或启动模拟器，然后运行：
+
+   ```bash
+   flutter run
+   ```
 
 ## 项目结构
 
 ```
 lib/
+├── main.dart
 ├── models/
 │   └── device.dart
 ├── screens/
@@ -35,32 +94,37 @@ lib/
 │   └── device_service.dart
 ├── utils/
 │   └── constants.dart
-├── widgets/
-│   ├── login_form.dart
-│   └── register_form.dart
-└── main.dart
+└── widgets/
+    ├── login_form.dart
+    └── register_form.dart
 ```
+
+- **main.dart**: 应用入口，配置路由与主题。
+- **models/**: 数据模型，如 `Device`。
+- **screens/**: 各个页面的实现，包括登录、设备管理、设备详情和数据分析。
+- **services/**: 与后端API交互的服务类。
+- **utils/**: 常量与工具类。
+- **widgets/**: 可复用的组件，如登录和注册表单。
 
 ## 详细说明
 
-### 1. 主程序入口 (main.dart)
+### 1. 主程序入口 (`main.dart`)
 
 主程序入口定义了应用的基本主题和路由。
 
-
-```1:51:lib/main.dart
+```dart
 import 'package:flutter/material.dart';
 import 'screens/login_register_screen.dart';
 import 'screens/device_management_screen.dart';
 import 'utils/constants.dart';
-void main() {
+
 void main() {
   runApp(const MyApp());
 }
-class MyApp extends StatelessWidget {
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  @override
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -83,7 +147,7 @@ class MyApp extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 12),
           ),
         ),
       ),
@@ -102,47 +166,130 @@ class MyApp extends StatelessWidget {
 }
 ```
 
+**说明:**
 
-这里我们设置了应用的主题颜色、输入框样式和按钮样式,以确保整个应用的一致性。同时,我们也定义了初始路由和其他路由,包括登录/注册页面和设备管理页面。
+- **主题配置**: 设置应用的主色调、输入框样式和按钮样式，确保整个应用的一致性。
+- **路由配置**:
+  - **初始路由**: `/` 对应 `LoginRegisterScreen` 登录/注册页面。
+  - **设备管理路由**: `/devices` 对应 `DeviceManagementScreen` 设备管理页面，如果用户未登录（`token` 为空），则重定向到登录页面。
 
-### 2. 登录和注册页面 (login_register_screen.dart)
+### 2. 登录和注册页面 (`login_register_screen.dart`)
 
-这个页面包含了登录和注册功能,用户可以在两者之间切换。
+该页面包含了登录和注册功能，用户可以在两者之间切换。
 
-主要组件:
-- LoginForm: 登录表单
-- RegisterForm: 注册表单
+**主要组件:**
 
-这个页面使用了卡片式设计和渐变背景,提供了良好的视觉体验。
+- **LoginForm**: 登录表单
+- **RegisterForm**: 注册表单
 
-### 3. 设备管理页面 (device_management_screen.dart)
+**样式特点:**
 
-设备管理页面显示了用户所有的设备列表,并提供了添加新设备的功能。
+- 使用卡片式设计和渐变背景，提供良好的视觉体验。
+- 表单验证与错误处理，确保用户输入的有效性。
 
+```dart
+import 'package:flutter/material.dart';
+import '../widgets/login_form.dart';
+import '../widgets/register_form.dart';
 
-```1:169:lib/screens/device_management_screen.dart
+class LoginRegisterScreen extends StatefulWidget {
+  const LoginRegisterScreen({Key? key}) : super(key: key);
+
+  @override
+  _LoginRegisterScreenState createState() => _LoginRegisterScreenState();
+}
+
+class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
+  bool _isLogin = true;
+
+  void _toggleView() {
+    setState(() {
+      _isLogin = !_isLogin;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blue.shade300, Colors.blue.shade700],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _isLogin ? '登录' : '注册',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      const SizedBox(height: 32),
+                      _isLogin ? const LoginForm() : const RegisterForm(),
+                      const SizedBox(height: 16),
+                      TextButton(
+                        onPressed: _toggleView,
+                        child: Text(_isLogin ? '没有账号? 注册' : '已有账号? 登录'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### 3. 设备管理页面 (`device_management_screen.dart`)
+
+设备管理页面显示了用户所有的设备列表，并提供了添加新设备的功能。
+
+**主要功能:**
+
+- **查看设备列表**: 以卡片形式展示设备名称、MAC地址和通信通道。
+- **添加新设备**: 通过弹出对话框输入设备信息。
+- **查看设备详情**: 点击设备卡片进入设备详细信息页面。
+
+```dart
 import 'package:flutter/material.dart';
 import '../services/device_service.dart';
 import '../models/device.dart';
 import 'device_detail_screen.dart';
 import 'data_analysis_screen.dart';
-import 'data_analysis_screen.dart';
+
 class DeviceManagementScreen extends StatefulWidget {
   const DeviceManagementScreen({Key? key}) : super(key: key);
-  const DeviceManagementScreen({Key? key}) : super(key: key);
+
   @override
   _DeviceManagementScreenState createState() => _DeviceManagementScreenState();
 }
-}
+
 class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
   late Future<List<Device>> _devicesFuture;
-  late Future<List<Device>> _devicesFuture;
+
   @override
   void initState() {
     super.initState();
     _devicesFuture = DeviceService.getAllDevices();
   }
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,7 +327,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                     ),
                     child: ListTile(
                       leading: Icon(Icons.devices, color: Colors.blue),
-                      title: Text(device.deviceName, style: TextStyle(fontWeight: FontWeight.bold)),
+                      title: Text(device.deviceName, style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(device.macAddress),
                       trailing: Chip(
                         label: Text(device.communicationChannel),
@@ -201,7 +348,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
             }
           },
         ),
-                    ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddDeviceDialog(context),
         child: const Icon(Icons.add),
@@ -209,7 +356,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
       ),
     );
   }
-                  TextButton(
+
   void _showAddDeviceDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -226,23 +373,23 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                 TextField(
                   decoration: InputDecoration(
                     labelText: '设备名称',
-                    prefixIcon: Icon(Icons.device_unknown),
+                    prefixIcon: const Icon(Icons.device_unknown),
                   ),
                   onChanged: (value) => deviceName = value,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   decoration: InputDecoration(
                     labelText: 'MAC地址',
-                    prefixIcon: Icon(Icons.router),
+                    prefixIcon: const Icon(Icons.router),
                   ),
                   onChanged: (value) => macAddress = value,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   decoration: InputDecoration(
                     labelText: '通信通道',
-                    prefixIcon: Icon(Icons.settings_ethernet),
+                    prefixIcon: const Icon(Icons.settings_ethernet),
                   ),
                   onChanged: (value) => communicationChannel = value,
                 ),
@@ -292,24 +439,30 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
 }
 ```
 
+### 4. 设备详情页面 (`device_detail_screen.dart`)
 
-这个页面使用了 `FutureBuilder` 来异步加载设备列表,并使用 `ListView.builder` 来高效地显示设备列表。每个设备项都使用了卡片式设计,提供了设备的基本信息。
+设备详情页面展示单个设备的详细信息，并提供查看数据分析的功能。
 
-### 4. 设备详情页面 (device_detail_screen.dart)
+**主要功能:**
 
-设备详情页面显示了单个设备的详细信息。
+- **查看设备信息**: 包括设备ID、MAC地址和通信通道。
+- **查看数据分析**: 导航到数据分析页面，查看设备产生的数据。
 
+**样式特点:**
 
-```1:99:lib/screens/device_detail_screen.dart
+- 使用卡片式布局和渐变背景，保持与其他页面的一致性。
+- 使用图标增强信息展示。
+
+```dart
 import 'package:flutter/material.dart';
 import '../models/device.dart';
 import 'data_analysis_screen.dart';
-class DeviceDetailScreen extends StatefulWidget {
+
 class DeviceDetailScreen extends StatelessWidget {
   final Device device;
+
   const DeviceDetailScreen({Key? key, required this.device}) : super(key: key);
-  const DeviceDetailScreen({Key? key, required this.device}) : super(key: key);
-  @override
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -402,15 +555,21 @@ class DeviceDetailScreen extends StatelessWidget {
 }
 ```
 
+### 5. 数据分析页面 (`data_analysis_screen.dart`)
 
-这个页面使用了卡片式设计来展示设备信息,并提供了一个按钮来查看数据分析。
+数据分析页面展示设备产生的数据，使用 `DataTable` 进行清晰的数据展示。
 
-### 5. 数据分析页面 (data_analysis_screen.dart)
+**主要功能:**
 
-数据分析页面显示了设备的数据分析结果。
+- **查看设备数据**: 包括序号、值和时间。
+- **数据表格展示**: 支持水平和垂直滚动，适配不同数据量。
 
+**样式特点:**
 
-```1:109:lib/screens/data_analysis_screen.dart
+- 使用卡片式布局和渐变背景，保持与其他页面的一致性。
+- 表格行采用交替颜色，增强可读性。
+
+```dart
 import 'package:flutter/material.dart';
 import '../models/device.dart';
 import '../services/device_service.dart';
@@ -520,22 +679,434 @@ class _DataAnalysisScreenState extends State<DataAnalysisScreen> {
         ),
       ),
     );
+  }
+}
 ```
-
-
-这个页面使用了 `DataTable` 来展示设备数据,提供了清晰的数据展示方式。
 
 ### 6. 服务类
 
-- AuthService: 处理用户认证相关的API请求
-- DeviceService: 处理设备相关的API请求
+**1. AuthService (`auth_service.dart`)**
 
-这些服务类封装了与后端API的交互,使得数据获取和处理更加简洁和模块化。
+处理用户认证相关的API请求，包括登录和注册。
 
-## 如何运行项目
+```dart
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../models/user.dart';
+import '../utils/constants.dart';
 
-1. 确保你已经安装了Flutter开发环境。
-2. 克隆本项目到本地。
-3. 在项目根目录运行 `flutter pub get` 安装依赖。
-4. 连接模拟器或真机设备。
-5. 运行 `flutter run` 启动应用。
+class AuthService {
+  static Future<User> login(String username, String password) async {
+    final response = await http.post(
+      Uri.parse('${ApiConstants.baseUrl}/api/login'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'username': username,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      ApiConstants.token = json['token'];
+      return User.fromJson(json);
+    } else {
+      throw Exception('登录失败');
+    }
+  }
+
+  static Future<User> register(String username, String password) async {
+    final response = await http.post(
+      Uri.parse('${ApiConstants.baseUrl}/api/register'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'username': username,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('注册失败');
+    }
+  }
+}
+```
+
+**2. DeviceService (`device_service.dart`)**
+
+处理设备相关的API请求，包括获取所有设备和注册新设备。
+
+```dart
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../models/device.dart';
+import '../utils/constants.dart';
+
+class DeviceService {
+  static Future<List<Device>> getAllDevices() async {
+    final response = await http.get(
+      Uri.parse('${ApiConstants.baseUrl}/api/devices'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${ApiConstants.token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList.map((json) => Device.fromJson(json)).toList();
+    } else {
+      throw Exception('获取设备列表失败');
+    }
+  }
+
+  static Future<Device> registerDevice(String deviceName, String macAddress, String communicationChannel) async {
+    final response = await http.post(
+      Uri.parse('${ApiConstants.baseUrl}/api/devices'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${ApiConstants.token}',
+      },
+      body: jsonEncode({
+        'deviceName': deviceName,
+        'macAddress': macAddress,
+        'communicationChannel': communicationChannel,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return Device.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('注册设备失败');
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getDeviceData(String deviceId) async {
+    final response = await http.get(
+      Uri.parse('${ApiConstants.baseUrl}/api/devices/$deviceId/data'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${ApiConstants.token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList.cast<Map<String, dynamic>>();
+    } else {
+      throw Exception('获取设备数据失败');
+    }
+  }
+}
+```
+
+### 7. 数据模型
+
+**Device 模型 (`device.dart`)**
+
+定义设备的数据结构。
+
+```dart
+class Device {
+  final String id;
+  final String deviceName;
+  final String macAddress;
+  final String communicationChannel;
+
+  Device({
+    required this.id,
+    required this.deviceName,
+    required this.macAddress,
+    required this.communicationChannel,
+  });
+
+  factory Device.fromJson(Map<String, dynamic> json) {
+    return Device(
+      id: json['id'],
+      deviceName: json['deviceName'],
+      macAddress: json['macAddress'],
+      communicationChannel: json['communicationChannel'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'deviceName': deviceName,
+        'macAddress': macAddress,
+        'communicationChannel': communicationChannel,
+      };
+}
+```
+
+**User 模型 (`user.dart`)**
+
+定义用户的数据结构。
+
+```dart
+class User {
+  final String id;
+  final String username;
+  final String token;
+
+  User({
+    required this.id,
+    required this.username,
+    required this.token,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      username: json['username'],
+      token: json['token'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'username': username,
+        'token': token,
+      };
+}
+```
+
+### 8. 工具类
+
+**常量文件 (`constants.dart`)**
+
+存储应用中使用的常量，如API端点和用户Token。
+
+```dart
+class ApiConstants {
+  static const String baseUrl = 'https://api.example.com'; // 替换为您的API端点
+  static String token = ''; // 用户登录后设置
+}
+```
+
+### 9. 小部件
+
+**登录表单 (`login_form.dart`)**
+
+实现用户登录表单。
+
+```dart
+import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({Key? key}) : super(key: key);
+
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextFormField(
+            controller: _usernameController,
+            decoration: InputDecoration(
+              labelText: '用户名',
+              prefixIcon: const Icon(Icons.person),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '请输入用户名';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _passwordController,
+            decoration: InputDecoration(
+              labelText: '密码',
+              prefixIcon: const Icon(Icons.lock),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            obscureText: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '请输入密码';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                try {
+                  await AuthService.login(
+                    _usernameController.text,
+                    _passwordController.text,
+                  );
+                  Navigator.pushReplacementNamed(context, '/devices');
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${e.toString()}')),
+                  );
+                }
+              }
+            },
+            child: const Text('登录'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+**注册表单 (`register_form.dart`)**
+
+实现用户注册表单。
+
+```dart
+import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
+
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key? key}) : super(key: key);
+
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextFormField(
+            controller: _usernameController,
+            decoration: InputDecoration(
+              labelText: '用户名',
+              prefixIcon: const Icon(Icons.person_add),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '请输入用户名';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _passwordController,
+            decoration: InputDecoration(
+              labelText: '密码',
+              prefixIcon: const Icon(Icons.lock_outline),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            obscureText: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '请输入密码';
+              }
+              if (value.length < 6) {
+                return '密码长度至少为6位';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                try {
+                  await AuthService.register(
+                    _usernameController.text,
+                    _passwordController.text,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('注册成功,请登录')),
+                  );
+                  setState(() {
+                    // 切换到登录视图
+                  });
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('注册失败: $e')),
+                  );
+                }
+              }
+            },
+            child: const Text('注册'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+## 使用指南
+
+### 用户认证
+
+1. **注册账户**
+   - 打开应用，点击“没有账号? 注册”按钮。
+   - 输入用户名和密码，点击“注册”按钮。
+   - 注册成功后，会提示“注册成功,请登录”。
+
+2. **登录**
+   - 输入已注册的用户名和密码，点击“登录”按钮。
+   - 登录成功后，会导航到设备管理页面。
+
+### 设备管理
+
+1. **查看设备列表**
+   - 登录后，进入设备管理页面，可查看所有已注册的设备。
+   - 每个设备以卡片形式展示，显示设备名称、MAC地址和通信通道。
+
+2. **添加新设备**
+   - 点击右下角的“+”按钮，弹出添加设备对话框。
+   - 输入设备名称、MAC地址和通信通道，点击“添加”。
+   - 添加成功后，设备会出现在列表中。
+
+3. **查看设备详情**
+   - 点击设备卡片，进入设备详情页面。
+   - 查看设备的ID、MAC地址和通信通道。
+   - 点击“查看数据分析”按钮，进入数据分析页面。
+
+### 数据分析
+
+1. **查看数据**
+   - 在设备详情页面，点击“查看数据分析”按钮。
+   - 数据分析页面展示设备产生的数据，包括序号、值和时间。
+   - 数据以表格形式展示，支持滚动查看。
+
+---
