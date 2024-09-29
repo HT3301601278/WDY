@@ -2,46 +2,98 @@ import 'package:flutter/material.dart';
 import '../models/device.dart';
 import 'data_analysis_screen.dart';
 
-class DeviceDetailScreen extends StatefulWidget {
+class DeviceDetailScreen extends StatelessWidget {
   final Device device;
 
   const DeviceDetailScreen({Key? key, required this.device}) : super(key: key);
 
   @override
-  _DeviceDetailScreenState createState() => _DeviceDetailScreenState();
-}
-
-class _DeviceDetailScreenState extends State<DeviceDetailScreen> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.device.deviceName),
+        title: Text(device.deviceName),
+        elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('设备ID: ${widget.device.id}'),
-            Text('MAC地址: ${widget.device.macAddress}'),
-            Text('通信通道: ${widget.device.communicationChannel}'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // 导航到数据分析页面
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DataAnalysisScreen(device: widget.device),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blue.shade300, Colors.blue.shade100],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildInfoRow(Icons.devices, '设备ID', '${device.id}'),
+                      const SizedBox(height: 16),
+                      _buildInfoRow(Icons.router, 'MAC地址', device.macAddress),
+                      const SizedBox(height: 16),
+                      _buildInfoRow(Icons.settings_ethernet, '通信通道', device.communicationChannel),
+                      const SizedBox(height: 32),
+                      Center(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.analytics),
+                          label: const Text('查看数据分析'),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            textStyle: const TextStyle(fontSize: 18),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DataAnalysisScreen(device: device),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              },
-              child: const Text('查看数据分析'),
+                ),
+              ),
             ),
-          ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.blue, size: 28),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: const TextStyle(fontSize: 18),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -18,10 +18,17 @@ class _RegisterFormState extends State<RegisterForm> {
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
             controller: _usernameController,
-            decoration: const InputDecoration(labelText: '用户名'),
+            decoration: InputDecoration(
+              labelText: '用户名',
+              prefixIcon: const Icon(Icons.person_add),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return '请输入用户名';
@@ -29,17 +36,28 @@ class _RegisterFormState extends State<RegisterForm> {
               return null;
             },
           ),
+          const SizedBox(height: 16),
           TextFormField(
             controller: _passwordController,
-            decoration: const InputDecoration(labelText: '密码'),
+            decoration: InputDecoration(
+              labelText: '密码',
+              prefixIcon: const Icon(Icons.lock_outline),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
             obscureText: true,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return '请输入密码';
               }
+              if (value.length < 6) {
+                return '密码长度至少为6位';
+              }
               return null;
             },
           ),
+          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
@@ -58,7 +76,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 }
               }
             },
-            child: const Text('注册'),
+            child: const Text('注册', style: TextStyle(fontSize: 18)),
           ),
         ],
       ),
